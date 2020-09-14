@@ -19,8 +19,8 @@ DNA.prototype.checkFit = function (target) {
     if (this.genes[i] === target[i]) fitScore++;
   }
 
-  // this.fitness = Math.pow(fitScore / target.length, 3);
-  this.fitness = fitScore / target.length;
+  this.fitness = Math.pow(fitScore / target.length, 3);
+  // this.fitness = fitScore / target.length;
 
   return this.fitness;
 };

@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import Setting from "../components/Setting";
 import Population from "../genetics/Population";
+import { map } from "../util/fitness";
+
 
 const App = () => {
   const population = useRef(null);
   const [setting, setSetting] = useState({
-    target: "Test",
+    target: "abdefghijklmnopqrs",
     maxPop: 200,
     mutRate: 0.01,
   });
@@ -21,13 +23,13 @@ const App = () => {
 
   useEffect(() => {
     const population = new Population(setting);
-    console.log('called');
+    console.log("called");
     while (!population.completed) {
       population.naturalSelection();
       population.generateGens();
-      population.printAll();
+      // population.printAll();
 
-      console.log(population);
+      console.log(population.generations, population.bestDNA);
     }
   }, [setting]);
   return (
