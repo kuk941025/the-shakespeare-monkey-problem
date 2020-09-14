@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import Setting from "../components/Setting";
 import Population from "../genetics/Population";
-import { map } from "../util/fitness";
+import Genetics from "../genetics";
+import genetic from "../genetics";
 
 
 const App = () => {
@@ -22,15 +23,17 @@ const App = () => {
   };
 
   useEffect(() => {
-    const population = new Population(setting);
-    console.log("called");
-    while (!population.completed) {
-      population.naturalSelection();
-      population.generateGens();
-      // population.printAll();
+    const genetics = new Genetics(setting);
+    while (!genetics.run());
+    // const population = new Population(setting);
+    // console.log("called");
+    // while (!population.completed) {
+    //   population.naturalSelection();
+    //   population.generateGens();
+    //   // population.printAll();
 
-      console.log(population.generations, population.bestDNA);
-    }
+    //   console.log(population.generations, population.bestDNA);
+    // }
   }, [setting]);
   return (
     <div className="App">
