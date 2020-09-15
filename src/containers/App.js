@@ -28,7 +28,8 @@ const App = () => {
     });
   };
 
-  const handleUpdate = () => {
+  const handleUpdate = (e) => {
+    if (e) e.preventDefault();
     setGenetics(new Genetics(setting));
   };
 

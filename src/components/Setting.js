@@ -9,12 +9,18 @@ const Setting = ({ handleChange, value = "", handleUpdate }) => {
   return (
     <div className={classes.settingRoot}>
       <Typography className={classes.typo}>Target Word</Typography>
-      <div className={classes.textRoot}>
+
+      <form className={classes.textRoot} onSubmit={handleUpdate}>
         <TextField value={value} onChange={handleChange} />
-        <Button color="primary" variant="contained" onClick={handleUpdate}>
+        <Button
+          type="submit"
+          color="primary"
+          variant="contained"
+          onClick={handleUpdate}
+        >
           Update
         </Button>
-      </div>
+      </form>
     </div>
   );
 };
