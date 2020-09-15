@@ -7,3 +7,6 @@ export const newChar = () => {
 
   return String.fromCharCode(ascii);
 };
+
+
+export const getRnd = () => Math.random().toString(36).substr(7);

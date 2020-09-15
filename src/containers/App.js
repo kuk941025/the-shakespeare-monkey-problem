@@ -1,20 +1,25 @@
 import React, { useState, useEffect, useRef } from "react";
 import Setting from "../components/Setting";
 import DisplayInfo from "../components/DisplayInfo";
+import DisplayWords from "../components/DisplayWords";
 import Genetics from "../genetics";
+import Divider from "@material-ui/core/Divider";
+import { REFRESH_TIME } from "../const/Time";
 
 const initSetting = {
-  target: "Test ",
+  target: "Hello world",
   maxPop: 200,
   mutRate: 0.01,
 };
 const App = () => {
-  const genetics = useRef(new Genetics(initSetting));
   const prevTimeRef = useRef();
   const reqRef = useRef();
+  const [genetics, setGenetics] = useState(new Genetics(initSetting));
   const [setting, setSetting] = useState(initSetting);
-  const [generations, setGenerations] = useState(0);
-
+  const [info, setInfo] = useState({
+    generations: 0,
+    bestWord: "",
+  });
 
   const handleChange = (id) => ({ target: { value } }) => {
     setSetting({
@@ -22,31 +27,36 @@ const App = () => {
       [id]: value,
     });
   };
+
   const handleUpdate = () => {
-    console.log(setting);
+    setGenetics(new Genetics(setting));
   };
-  const runGenetics = (time) => {
-    if (prevTimeRef.current) {
+
+  useEffect(() => {
+    const runGenetics = (time) => {
+      if (!prevTimeRef.current) prevTimeRef.current = time;
       const dTime = time - prevTimeRef.current;
-      if (dTime > 500) {
-        if (genetics.current.run()) {
+
+      if (dTime > REFRESH_TIME) {
+        prevTimeRef.current = time;
+        const completed = genetics.run();
+        setInfo({
+          generations: genetics.getGens(),
+          bestWord: genetics.getBestDNA(),
+        });
+
+        if (completed) {
           cancelAnimationFrame(reqRef.current);
           return;
         }
-
-        setGenerations(genetics.current.getGens());
-        prevTimeRef.current = time;
       }
-    } else {
-      prevTimeRef.current = time;
-    }
 
-    reqRef.current = requestAnimationFrame(runGenetics);
-  };
-  useEffect(() => {
+      reqRef.current = requestAnimationFrame(runGenetics);
+    };
+
     reqRef.current = requestAnimationFrame(runGenetics);
     return () => cancelAnimationFrame(reqRef.current);
-  });
+  }, [genetics]);
 
   return (
     <div>
@@ -58,8 +68,12 @@ const App = () => {
       <DisplayInfo
         maxPop={setting.maxPop}
         mutRate={setting.mutRate}
-        generations={generations}
+        generations={info.generations}
+        bestWord={info.bestWord}
       />
+
+      <Divider variant="inset" style={{ margin: 8 }} />
+      <DisplayWords words={genetics.getWords(100)} />
     </div>
   );
 };

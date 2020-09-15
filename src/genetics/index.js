@@ -3,7 +3,7 @@ import Population from "./Population";
 export default function genetic(setting) {
   this.population = new Population(setting);
 }
-genetic.prototype.run = function (bestFlag = true) {
+genetic.prototype.run = function (bestFlag = false) {
   this.population.naturalSelection();
   this.population.generateGens();
 
@@ -17,4 +17,10 @@ genetic.prototype.getGens = function () {
 
 genetic.prototype.getBestDNA = function () {
   return this.population.bestDNA;
+};
+
+genetic.prototype.getWords = function (num = 50) {
+  return this.population.populations
+    .slice(0, num)
+    .map((pop) => pop.phenotype());
 };
